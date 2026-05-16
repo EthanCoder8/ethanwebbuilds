@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EthanWebBuilds</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #F2F0EB;
+  --bg-card:   #EDEAE3;
+  --white:     #FFFFFF;
+  --black:     #111111;
+  --text:      #1A1A1A;
+  --text-mid:  #555550;
+  --text-lt:   #999990;
+  --blue:      #3A7CA5;
+  --blue-lt:   #4A9AC7;
+  --blue-dk:   #2C6088;
+  --blue-tint: rgba(58,124,165,0.08);
+  --blue-border:rgba(58,124,165,0.18);
+  --yellow:    #D4F53C;
+  --yellow-dk: #BBDA28;
+  --glass:     rgba(255,255,255,0.55);
+  --glass-border: rgba(255,255,255,0.7);
+  --border:    rgba(0,0,0,0.08);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Geist', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+/* ── NAV ── */
+.nav-wrapper {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  padding: 18px 40px;
+  display: flex; align-items: center; justify-content: space-between;
+  pointer-events: none;
+}
+
+.nav-brand {
+  font-family: 'Geist', sans-serif; font-size: 15px; font-weight: 700;
+  color: var(--black); text-decoration: none; letter-spacing: -.02em;
+  pointer-events: all;
+}
+.nav-brand em { color: var(--blue); font-style: normal; }
+
+.nav-pill {
+  display: flex; align-items: center; gap: 2px;
+  background: var(--glass);
+  backdrop-filter: blur(20px) saturate(1.6);
+  -webkit-backdrop-filter: blur(20px) saturate(1.6);
+  border: 1px solid var(--glass-border);
+  border-radius: 100px;
+  padding: 6px 8px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  pointer-events: all;
+  list-style: none;
+}
+.nav-pill li a {
+  display: block; padding: 8px 18px;
+  font-size: 13.5px; font-weight: 500; color: var(--text-mid);
+  text-decoration: none; border-radius: 100px;
+  transition: background .2s, color .2s; white-space: nowrap;
+}
+.nav-pill li a:hover { background: rgba(0,0,0,0.06); color: var(--black); }
+
+.nav-cta {
+  background: #eae205; color: var(--black);
+  padding: 10px 22px; border-radius: 100px;
+  font-size: 13.5px; font-weight: 700; text-decoration: none;
+  transition: background .2s, transform .2s;
+  box-shadow: 0 2px 12px rgba(234,226,5,0.3);
+  pointer-events: all; white-space: nowrap;
+}
+.nav-cta:hover { background: #cdc904; transform: translateY(-1px); }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center;
+  padding: 140px 40px 100px;
+  position: relative; overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 30%, rgba(58,124,165,0.07) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 50% at 80% 80%, rgba(212,245,60,0.06) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--glass); border: 1px solid var(--glass-border);
+  backdrop-filter: blur(12px); padding: 7px 16px; border-radius: 100px;
+  font-size: 11px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--blue); margin-bottom: 36px;
+  animation: fadeUp .7s ease both; animation-delay: .1s;
+}
+.badge-pulse { width: 6px; height: 6px; background: var(--blue); border-radius: 50%; animation: blink 2s infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+.hero h1 {
+  font-family: 'Instrument Serif', serif;
+  font-size: clamp(52px, 8vw, 110px);
+  font-weight: 400; line-height: 1.0;
+  color: var(--black); letter-spacing: -.04em;
+  max-width: 900px; margin-bottom: 28px;
+  animation: fadeUp .8s ease both; animation-delay: .25s;
+}
+.hero h1 em { color: var(--blue); font-style: italic; }
+
+.hero-sub {
+  font-size: 17px; color: var(--text-mid); line-height: 1.7;
+  max-width: 520px; margin-bottom: 44px;
+  animation: fadeUp .8s ease both; animation-delay: .4s;
+}
+
+.hero-actions {
+  display: flex; gap: 12px; align-items: center; justify-content: center;
+  animation: fadeUp .8s ease both; animation-delay: .55s;
+  margin-bottom: 80px;
+}
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--black); color: #fff;
+  padding: 14px 28px; border-radius: 100px;
+  font-size: 13.5px; font-weight: 600; letter-spacing: .02em;
+  text-decoration: none; transition: all .22s;
+}
+.btn-primary:hover { background: var(--blue); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(58,124,165,.25); }
+.btn-secondary {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: transparent; color: var(--text-mid);
+  padding: 14px 28px; border-radius: 100px;
+  border: 1px solid var(--border);
+  font-size: 13.5px; font-weight: 500;
+  text-decoration: none; transition: all .22s;
+}
+.btn-secondary:hover { background: rgba(0,0,0,0.04); color: var(--black); border-color: rgba(0,0,0,0.16); }
+
+.scroll-hint {
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  animation: fadeUp .8s ease both; animation-delay: .8s;
+}
+.scroll-hint span { font-size: 10px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--text-lt); }
+.scroll-line { width: 1px; height: 40px; background: linear-gradient(180deg, var(--text-lt), transparent); }
+
+@keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+
+/* ── WORK ── */
+.work { padding: 100px 40px; max-width: 1200px; margin: 0 auto; }
+
+.section-label {
+  display: flex; align-items: center; gap: 14px; margin-bottom: 48px;
+}
+.section-label span { font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--text-lt); }
+.section-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+.work-card {
+  background: var(--white); border-radius: 20px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  box-shadow: 0 2px 40px rgba(0,0,0,0.05);
+}
+
+.work-card-top {
+  display: grid; grid-template-columns: 1fr 1.4fr; min-height: 480px;
+}
+
+.work-info {
+  padding: 52px 48px;
+  display: flex; flex-direction: column; justify-content: space-between;
+  border-right: 1px solid var(--border);
+}
+.work-tag {
+  display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--blue);
+  background: var(--blue-tint); border: 1px solid var(--blue-border);
+  padding: 5px 12px; border-radius: 100px; margin-bottom: 28px;
+  width: fit-content;
+}
+.work-info h2 {
+  font-family: 'Instrument Serif', serif;
+  font-size: clamp(36px, 4vw, 52px); font-weight: 400;
+  color: var(--black); line-height: 1.05; letter-spacing: -.03em;
+  margin-bottom: 18px;
+}
+.work-info h2 em { color: var(--blue); font-style: italic; }
+.work-info p { font-size: 14.5px; color: var(--text-mid); line-height: 1.75; margin-bottom: 28px; }
+
+.work-chips { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 36px; }
+.chip {
+  font-size: 10.5px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--text-mid); background: var(--bg-card);
+  border: 1px solid var(--border); padding: 5px 12px; border-radius: 100px;
+}
+
+.work-metrics { display: flex; gap: 32px; padding-top: 28px; border-top: 1px solid var(--border); }
+.wm-n { font-family: 'Instrument Serif', serif; font-size: 32px; color: var(--black); line-height: 1; }
+.wm-n em { color: var(--blue); font-style: normal; }
+.wm-l { font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--text-lt); margin-top: 4px; }
+
+.work-preview {
+  background: #F5F0EB;
+  display: flex; flex-direction: column;
+  position: relative; overflow: hidden;
+}
+
+.browser-chrome {
+  background: rgba(255,255,255,0.8); border-bottom: 1px solid rgba(0,0,0,0.06);
+  padding: 12px 16px; display: flex; align-items: center; gap: 12px; flex-shrink: 0;
+}
+.bdots { display: flex; gap: 6px; }
+.bdots span { width: 10px; height: 10px; border-radius: 50%; }
+.bd1{background:#FF5F57;} .bd2{background:#FEBC2E;} .bd3{background:#28C840;}
+.burl { font-size: 11px; color: #999; font-family: monospace; margin-left: 4px; }
+
+.lnm-ui { flex: 1; overflow: hidden; padding: 0; display: flex; flex-direction: column; }
+
+.lnm-header {
+  background: #fff; padding: 10px 20px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid rgba(0,0,0,0.05); flex-shrink: 0;
+}
+.lnm-logo-wrap { display: flex; align-items: center; gap: 9px; }
+.lnm-icon { width: 30px; height: 30px; background: #C0392B; border-radius: 7px; display: flex; align-items: center; justify-content: center; }
+.lnm-icon svg { width: 15px; height: 15px; }
+.lnm-title { font-size: 13px; font-weight: 700; color: #1a1a1a; }
+.lnm-sub { font-size: 9px; color: #999; font-weight: 400; }
+.lnm-moon { width: 28px; height: 28px; border-radius: 50%; background: #f0ede8; display: flex; align-items: center; justify-content: center; }
+
+.lnm-body { flex: 1; padding: 18px 20px; overflow: hidden; }
+
+.lnm-hero-badge {
+  background: rgba(192,57,43,0.08); border: 1px solid rgba(192,57,43,0.15);
+  color: #C0392B; font-size: 9px; font-weight: 700; letter-spacing: .1em;
+  text-transform: uppercase; padding: 4px 12px; border-radius: 100px;
+  display: inline-block; margin-bottom: 8px;
+}
+.lnm-hero-title { font-family: 'Geist', sans-serif; font-size: 18px; font-weight: 800; color: #1a1a1a; margin-bottom: 4px; }
+.lnm-hero-title span { color: #C0392B; }
+.lnm-hero-sub { font-size: 10px; color: #888; margin-bottom: 16px; }
+
+.lnm-upcoming-label {
+  font-size: 12px; font-weight: 700; color: #1a1a1a; margin-bottom: 12px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.lnm-nav-arrows { display: flex; gap: 6px; }
+.lnm-arrow { width: 22px; height: 22px; border-radius: 50%; background: #f0ede8; border: none; display: flex; align-items: center; justify-content: center; cursor: default; }
+
+.lnm-cards-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.lnm-ecard { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,.06); }
+.lnm-ecard-img {
+  height: 140px; position: relative;
+  display: flex; align-items: flex-end; padding: 10px;
+  background-size: cover; background-position: center;
+}
+.lnm-ecard-img::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 30%, rgba(0,0,0,0.65) 100%); border-radius: 0; }
+.padel-img { background: linear-gradient(135deg, #1a4a2e 0%, #2d6b3e 40%, #4a8b5e 100%); }
+.football-img { background: linear-gradient(135deg, #1a2a1a 0%, #2d4a2d 40%, #3a5a3a 100%); }
+.run-img { background: linear-gradient(135deg, #1a2a3a 0%, #2d4a6a 40%, #4a7aaa 100%); }
+.lnm-price-badge { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.5); color: #fff; font-size: 9px; font-weight: 700; padding: 3px 9px; border-radius: 100px; z-index: 2; }
+.lnm-free-badge { background: rgba(255,255,255,0.9); color: #1a1a1a; }
+.lnm-loc-badge { position: absolute; bottom: 36px; left: 10px; z-index: 2; display: flex; align-items: center; gap: 3px; }
+.lnm-loc-dot { width: 6px; height: 6px; background: #C0392B; border-radius: 50%; }
+.lnm-loc-text { font-size: 8px; font-weight: 600; color: rgba(255,255,255,0.85); text-transform: uppercase; letter-spacing: .06em; }
+.lnm-card-title-text { position: absolute; bottom: 14px; left: 10px; right: 10px; z-index: 2; font-size: 13px; font-weight: 700; color: #fff; line-height: 1.2; }
+.lnm-card-meta-text { position: absolute; bottom: 8px; left: 10px; right: 10px; z-index: 2; font-size: 8px; color: rgba(255,255,255,0.7); }
+.lnm-ecard-footer { padding: 8px 10px; }
+.lnm-ecard-details { font-size: 8.5px; color: #888; margin-bottom: 7px; display: flex; flex-direction: column; gap: 2px; }
+.lnm-book-btn { width: 100%; padding: 8px; background: #fff; color: #1a1a1a; border: none; border-radius: 8px; font-size: 10px; font-weight: 700; letter-spacing: .02em; cursor: default; box-shadow: 0 1px 4px rgba(0,0,0,.08); }
+
+/* ── SERVICES ── */
+.services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.svc-card {
+  background: var(--white); border-radius: 16px; padding: 32px 28px;
+  border: 1px solid var(--border); transition: all .28s;
+  position: relative; overflow: hidden;
+}
+.svc-card::before {
+  content: ''; position: absolute; top: 0; left: 24px; right: 24px; height: 2px;
+  background: var(--blue); border-radius: 0 0 2px 2px;
+  transform: scaleX(0); transition: transform .3s;
+}
+.svc-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,.08); border-color: var(--blue-border); }
+.svc-card:hover::before { transform: scaleX(1); }
+.svc-num { font-family: 'Instrument Serif', serif; font-size: 36px; color: rgba(0,0,0,.06); line-height: 1; margin-bottom: 16px; }
+.svc-card h3 { font-size: 14px; font-weight: 700; color: var(--black); margin-bottom: 10px; letter-spacing: -.01em; }
+.svc-card p { font-size: 13px; color: var(--text-mid); line-height: 1.68; }
+.svc-pill { display: inline-block; font-size: 9.5px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--blue); background: var(--blue-tint); border: 1px solid var(--blue-border); padding: 3px 10px; border-radius: 100px; margin-top: 16px; }
+
+/* ── CONTACT ── */
+.contact { background: var(--black); padding: 100px 40px; margin: 0; }
+.contact-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+
+.contact h2 {
+  font-family: 'Instrument Serif', serif;
+  font-size: clamp(42px, 6vw, 72px); font-weight: 400;
+  color: #fff; line-height: 1.0; letter-spacing: -.04em; margin-bottom: 20px;
+}
+.contact h2 em { color: var(--yellow); font-style: italic; }
+.contact-sub { font-size: 15px; color: rgba(255,255,255,.5); line-height: 1.7; margin-bottom: 40px; }
+
+.contact-links { display: flex; flex-direction: column; gap: 10px; }
+.clink {
+  display: flex; align-items: center; gap: 14px;
+  background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.09);
+  border-radius: 12px; padding: 16px 20px; text-decoration: none; transition: all .22s;
+}
+.clink:hover { background: rgba(255,255,255,.09); border-color: rgba(212,245,60,.2); transform: translateX(4px); }
+.clink-icon { width: 36px; height: 36px; background: rgba(255,255,255,.07); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.clink-label { font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.35); }
+.clink-value { font-size: 14px; font-weight: 500; color: #fff; margin-top: 2px; }
+.clink-arrow { margin-left: auto; color: rgba(255,255,255,.2); transition: color .2s, transform .2s; }
+.clink:hover .clink-arrow { color: var(--yellow); transform: translateX(3px); }
+
+.avail-row { display: flex; align-items: center; gap: 10px; margin-top: 32px; }
+.avail-dot { width: 8px; height: 8px; background: #22c55e; border-radius: 50%; animation: pg 2s infinite; }
+@keyframes pg { 0%,100%{box-shadow:0 0 0 0 rgba(34,197,94,.4)} 50%{box-shadow:0 0 0 8px rgba(34,197,94,0)} }
+.avail-text { font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: rgba(255,255,255,.35); }
+
+/* Contact form */
+.contact-form { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.09); border-radius: 20px; padding: 40px; }
+.fg { margin-bottom: 18px; }
+.fg label { display: block; font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.3); margin-bottom: 7px; }
+.fg input, .fg textarea, .fg select {
+  width: 100%; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1);
+  border-radius: 10px; padding: 13px 16px;
+  font-family: 'Geist', sans-serif; font-size: 14px; color: #fff;
+  outline: none; transition: border-color .22s, background .22s; appearance: none;
+}
+.fg input:focus, .fg textarea:focus, .fg select:focus { border-color: rgba(212,245,60,.4); background: rgba(212,245,60,.03); }
+.fg input::placeholder, .fg textarea::placeholder { color: rgba(255,255,255,.2); }
+.fg select { color: rgba(255,255,255,.45); }
+.fg select option { background: #1a1a1a; color: #fff; }
+.fg textarea { height: 110px; resize: none; }
+.frow { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.submit-btn {
+  width: 100%; padding: 15px; background: var(--blue); color: #fff;
+  border: none; border-radius: 100px; font-family: 'Geist', sans-serif;
+  font-weight: 700; font-size: 13.5px; letter-spacing: .04em;
+  cursor: pointer; transition: all .22s; display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.submit-btn:hover { background: var(--blue-dk); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(58,124,165,.35); }
+
+/* ── FOOTER ── */
+footer {
+  background: var(--black); border-top: 1px solid rgba(255,255,255,.07);
+  padding: 24px 40px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.footer-brand { font-size: 14px; font-weight: 700; color: rgba(255,255,255,.3); }
+.footer-brand em { color: var(--blue); font-style: normal; }
+.footer-copy { font-size: 11px; color: rgba(255,255,255,.2); letter-spacing: .04em; }
+
+/* ── SCROLL REVEAL ── */
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity .65s ease, transform .65s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal.d1 { transition-delay: .1s; }
+.reveal.d2 { transition-delay: .2s; }
+.reveal.d3 { transition-delay: .3s; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<div class="nav-wrapper">
+  <a href="#" class="nav-brand">Ethan<em>WebBuilds</em></a>
+  <ul class="nav-pill">
+    <li><a href="#work">Work</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#approach">Approach</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Get in touch</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">
+    <div class="badge-pulse"></div>
+    UK — Available for new projects
+  </div>
+  <h1>
+    Your website.<br>
+    <em>Built right.</em>
+  </h1>
+  <p class="hero-sub">
+    Hi, I'm Ethan. I build custom websites, booking systems, and digital tools — collaboratively, from idea to launch. Modern themes, real functionality, nothing off the shelf.
+  </p>
+  <div class="scroll-hint">
+    <span>Scroll to see my work</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- WORK -->
+<div style="max-width:1200px;margin:0 auto;padding:0 40px;" id="work">
+  <div class="section-label reveal">
+    <span>Featured work</span>
+  </div>
+</div>
+
+<div style="max-width:1200px;margin:0 auto;padding:0 40px 100px;" class="reveal">
+  <div class="work-card">
+    <div class="work-card-top">
+      <div class="work-info">
+        <div>
+          <div class="work-tag">Case Study — Dubai, UAE — 2026</div>
+          <h2>Lift N'<br><em style="color:#C0392B;">Move</em></h2>
+          <p>A full-stack fitness community booking platform built from scratch in Dubai. Members browse upcoming events, book sessions in seconds, and receive an instant confirmation. Coaches manage everything from a custom admin dashboard.</p>
+          <div class="work-chips">
+            <span class="chip">React</span>
+            <span class="chip">Supabase</span>
+            <span class="chip">Vercel</span>
+            <span class="chip">PayPal</span>
+            <span class="chip">Strava API</span>
+            <span class="chip">Dark Mode</span>
+          </div>
+        </div>
+        <div class="work-metrics">
+          <div><div class="wm-n">8<em>+</em></div><div class="wm-l">Features shipped</div></div>
+          <div><div class="wm-n">0</div><div class="wm-l">Templates used</div></div>
+          <div><div class="wm-n">Live</div><div class="wm-l">In production</div></div>
+        </div>
+      </div>
+
+      <!-- LiftNMove preview -->
+      <div class="work-preview">
+        <div class="browser-chrome">
+          <div class="bdots"><span class="bd1"></span><span class="bd2"></span><span class="bd3"></span></div>
+          <div class="burl">liftnmoveglobal.co</div>
+        </div>
+        <div class="lnm-ui">
+          <div class="lnm-header">
+            <div class="lnm-logo-wrap">
+              <div class="lnm-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              </div>
+              <div>
+                <div class="lnm-title">Lift N' Move</div>
+                <div class="lnm-sub">Lifestyle &amp; Wellness</div>
+              </div>
+            </div>
+            <div class="lnm-moon">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+            </div>
+          </div>
+          <div class="lnm-body">
+            <div style="text-align:center;margin-bottom:14px;">
+              <div class="lnm-hero-badge">Lifestyle and Wellness Redefined</div>
+              <div class="lnm-hero-title">Hello, welcome to <span>Lift N' Move</span></div>
+              <div class="lnm-hero-sub">Find a session, secure your spot, show up and have fun.</div>
+            </div>
+            <div class="lnm-upcoming-label">
+              Upcoming events
+              <div class="lnm-nav-arrows">
+                <div class="lnm-arrow"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg></div>
+                <div class="lnm-arrow"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></div>
+              </div>
+            </div>
+            <div class="lnm-cards-row">
+              <div class="lnm-ecard">
+                <div class="lnm-ecard-img padel-img">
+                  <span class="lnm-price-badge">AED 40.00</span>
+                  <div class="lnm-loc-badge"><div class="lnm-loc-dot"></div><div class="lnm-loc-text">MVP Padel Al Quoz</div></div>
+                  <div class="lnm-card-title-text">Lift N' Move Padel</div>
+                  <svg style="position:absolute;right:10px;bottom:20px;z-index:2;opacity:.4" width="30" height="30" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="7" r="5"/><path d="M5 22s1-7 7-7 7 7 7 7"/></svg>
+                </div>
+                <div class="lnm-ecard-footer">
+                  <div class="lnm-ecard-details"><span>📅 Sun 17 May · 11:00 · 1h</span><span>👥 8 of 8 spots left</span></div>
+                  <button class="lnm-book-btn">Book now</button>
+                </div>
+              </div>
+              <div class="lnm-ecard">
+                <div class="lnm-ecard-img football-img">
+                  <span class="lnm-price-badge">AED 40.00</span>
+                  <div class="lnm-loc-badge"><div class="lnm-loc-dot"></div><div class="lnm-loc-text">Al Quoz</div></div>
+                  <div class="lnm-card-title-text">Lift N' Move 5's Football</div>
+                  <svg style="position:absolute;right:10px;bottom:20px;z-index:2;opacity:.4" width="26" height="26" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 000 20A10 10 0 0012 2z" fill="none" stroke="white" stroke-width="1"/><path d="M12 6l3 4H9l3-4zm0 12l-3-4h6l-3 4zm-6-6l4-3v6l-4-3zm12 0l-4 3V9l4 3z" fill="white" opacity=".6"/></svg>
+                </div>
+                <div class="lnm-ecard-footer">
+                  <div class="lnm-ecard-details"><span>📅 Tue 19 May · 20:00 · 1h</span><span>👥 13 of 14 spots left</span></div>
+                  <button class="lnm-book-btn">Book now</button>
+                </div>
+              </div>
+              <div class="lnm-ecard">
+                <div class="lnm-ecard-img run-img">
+                  <span class="lnm-price-badge lnm-free-badge">Free</span>
+                  <div class="lnm-loc-badge"><div class="lnm-loc-dot"></div><div class="lnm-loc-text">JBR</div></div>
+                  <div class="lnm-card-title-text">Lift N' Move 5k Run Club</div>
+                  <svg style="position:absolute;right:10px;bottom:20px;z-index:2;opacity:.4" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M13 4a1 1 0 102 0 1 1 0 00-2 0zm-2 4l-3 8m3-8l2 3 3-2"/></svg>
+                </div>
+                <div class="lnm-ecard-footer">
+                  <div class="lnm-ecard-details"><span>📅 Thu 21 May · 19:00 · 1h25m</span><span>👥 2 people signed up</span></div>
+                  <button class="lnm-book-btn">Book now</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Next project bar -->
+    <div style="padding:28px 40px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--bg-card);">
+      <div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text-lt);margin-bottom:6px;">Up next</div>
+        <div style="font-family:'Instrument Serif',serif;font-size:22px;color:var(--black);">Your business could be here.</div>
+      </div>
+      <a href="#contact" class="btn-primary">Start a project</a>
+    </div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<div style="max-width:1200px;margin:0 auto;padding:0 40px 100px;" id="services">
+  <div class="section-label reveal"><span>Services</span></div>
+  <div class="services-grid">
+    <div class="svc-card reveal">
+      <div class="svc-num">01</div>
+      <h3>Websites &amp; Landing Pages</h3>
+      <p>Fast, fully custom sites built around your brand. Multiple pages, dark modes, mobile-first — everything your business needs to look the part.</p>
+      <span class="svc-pill">React · Vercel</span>
+    </div>
+    <div class="svc-card reveal d1">
+      <div class="svc-num">02</div>
+      <h3>Booking Systems</h3>
+      <p>Live calendars, instant confirmations, admin dashboards and CSV exports. Replace your static timetable or third-party app with something you own.</p>
+      <span class="svc-pill">Supabase · Custom</span>
+    </div>
+    <div class="svc-card reveal d2">
+      <div class="svc-num">03</div>
+      <h3>AI Tools &amp; Automation</h3>
+      <p>AI chatbots, WhatsApp agents, email sequences, and lead capture systems — built to do the admin work while you focus on your business.</p>
+      <span class="svc-pill">AI · WhatsApp · Email</span>
+    </div>
+  </div>
+</div>
+
+<!-- APPROACH -->
+<div style="max-width:1200px;margin:0 auto;padding:0 40px 100px;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;" id="approach">
+  <div class="reveal">
+    <div class="section-label"><span>Approach</span></div>
+    <div style="font-family:'Instrument Serif',serif;font-size:clamp(34px,4vw,52px);color:var(--black);line-height:1.05;letter-spacing:-.03em;">
+      How I work<br><em style="color:var(--blue);font-style:italic;">with you</em>
+    </div>
+  </div>
+  <div style="padding-top:60px;">
+    <div style="display:flex;flex-direction:column;gap:0;">
+      <div style="display:flex;gap:20px;padding:24px 0;border-bottom:1px solid var(--border);" class="reveal">
+        <div style="font-family:'Instrument Serif',serif;font-size:13px;color:var(--text-lt);flex-shrink:0;padding-top:2px;">01</div>
+        <div>
+          <div style="font-size:13.5px;font-weight:700;color:var(--black);margin-bottom:6px;">Discovery</div>
+          <div style="font-size:13.5px;color:var(--text-mid);line-height:1.65;">We talk about what you need, who it's for, and what you want it to do. A real conversation, not a form.</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:20px;padding:24px 0;border-bottom:1px solid var(--border);" class="reveal d1">
+        <div style="font-family:'Instrument Serif',serif;font-size:13px;color:var(--text-lt);flex-shrink:0;padding-top:2px;">02</div>
+        <div>
+          <div style="font-size:13.5px;font-weight:700;color:var(--black);margin-bottom:6px;">Concept &amp; mockup</div>
+          <div style="font-size:13.5px;color:var(--text-mid);line-height:1.65;">I build an interactive visual concept matched to your brand. You see it before any commitment.</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:20px;padding:24px 0;border-bottom:1px solid var(--border);" class="reveal d2">
+        <div style="font-family:'Instrument Serif',serif;font-size:13px;color:var(--text-lt);flex-shrink:0;padding-top:2px;">03</div>
+        <div>
+          <div style="font-size:13.5px;font-weight:700;color:var(--black);margin-bottom:6px;">Build &amp; iterate</div>
+          <div style="font-size:13.5px;color:var(--text-mid);line-height:1.65;">Fast builds with regular check-ins. You review at every stage and I refine until it is right.</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:20px;padding:24px 0;" class="reveal d3">
+        <div style="font-family:'Instrument Serif',serif;font-size:13px;color:var(--text-lt);flex-shrink:0;padding-top:2px;">04</div>
+        <div>
+          <div style="font-size:13.5px;font-weight:700;color:var(--black);margin-bottom:6px;">Launch &amp; support</div>
+          <div style="font-size:13.5px;color:var(--text-mid);line-height:1.65;">Deployed fast. I'm still here after launch for updates, new features, and whatever comes next.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="contact-inner">
+    <div class="reveal">
+      <h2>Let's build<br><em style="color:var(--blue);">something.</em></h2>
+      <p class="contact-sub">Tell me about your project and I will get back to you within 24 hours. No pressure — just a real conversation about what your business needs.</p>
+      <div class="contact-links">
+        <a href="mailto:EthanWebBuilds@outlook.com" class="clink">
+          <div class="clink-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+          <div><div class="clink-label">Email</div><div class="clink-value">EthanWebBuilds@outlook.com</div></div>
+          <div class="clink-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></div>
+        </a>
+      </div>
+      <div class="avail-row">
+        <div class="avail-dot"></div>
+        <div class="avail-text">Available for new projects</div>
+      </div>
+    </div>
+
+    <!-- Formspree form — replace YOUR_FORM_ID after signing up at formspree.io -->
+    <form
+      class="contact-form reveal d1"
+      method="POST"
+      action="https://formspree.io/f/YOUR_FORM_ID"
+    >
+      <input type="hidden" name="_subject" value="New project enquiry — EthanWebBuilds">
+      <input type="hidden" name="_replyto" value="">
+      <div class="frow">
+        <div class="fg"><label>Your name</label><input type="text" name="name" autocomplete="given-name" placeholder="First name" required/></div>
+        <div class="fg"><label>Business</label><input type="text" name="business" autocomplete="organization" placeholder="Your business"/></div>
+      </div>
+      <div class="fg"><label>Email</label><input type="email" name="email" autocomplete="email" placeholder="you@yourbusiness.com" required/></div>
+      <div class="fg">
+        <label>What do you need?</label>
+        <select name="service">
+          <option value="">— Select a service —</option>
+          <option>Website or landing page</option>
+          <option>Booking system</option>
+          <option>AI chatbot or WhatsApp agent</option>
+          <option>Membership portal</option>
+          <option>Email or social automation</option>
+          <option>Not sure yet — let's talk</option>
+        </select>
+      </div>
+      <div class="fg"><label>Tell me more</label><textarea name="message" placeholder="What are you building and what do you want it to do?"></textarea></div>
+      <button type="submit" class="submit-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        Send message
+      </button>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">Ethan<em>WebBuilds</em></div>
+  <div class="footer-copy">© 2026 — Manchester, UK</div>
+</footer>
+
+<script>
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+window.addEventListener('scroll', () => {
+  const nav = document.querySelector('.nav-wrapper');
+  nav.style.background = window.scrollY > 60
+    ? 'rgba(242,240,235,0.7)'
+    : 'transparent';
+});
+</script>
+</body>
+</html>
