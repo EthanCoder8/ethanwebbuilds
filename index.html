@@ -621,11 +621,9 @@ footer {
       </div>
     </div>
 
-    <!-- Formspree form — replace YOUR_FORM_ID after signing up at formspree.io -->
     <form
       class="contact-form reveal d1"
-      method="POST"
-      action="https://formspree.io/f/mgojadkl"
+      id="contact-form"
     >
       <input type="hidden" name="_subject" value="New project enquiry — EthanWebBuilds">
       <input type="hidden" name="_replyto" value="">
@@ -727,6 +725,34 @@ document.querySelectorAll('.preview-tab').forEach(tab => {
     imgs[idx].classList.add('active');
     tab.classList.add('active');
   });
+});
+
+// Contact form — AJAX submit
+const form = document.getElementById('contact-form');
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = form.querySelector('.submit-btn');
+  const original = btn.innerHTML;
+  btn.innerHTML = 'Sending...';
+  btn.disabled = true;
+  try {
+    const res = await fetch('https://formspree.io/f/mgojadkl', {
+      method: 'POST',
+      body: new FormData(form),
+      headers: { 'Accept': 'application/json' }
+    });
+    if (res.ok) {
+      form.innerHTML = '<div style="text-align:center;padding:60px 20px;"><div style="font-family:Instrument Serif,serif;font-size:32px;color:#fff;margin-bottom:12px;">Message sent.</div><p style="color:rgba(255,255,255,.5);font-size:14px;">I\'ll get back to you within 24 hours.</p></div>';
+    } else {
+      btn.innerHTML = 'Something went wrong — try again';
+      btn.disabled = false;
+      setTimeout(() => { btn.innerHTML = original; }, 3000);
+    }
+  } catch {
+    btn.innerHTML = 'Something went wrong — try again';
+    btn.disabled = false;
+    setTimeout(() => { btn.innerHTML = original; }, 3000);
+  }
 });
 </script>
 </body>
