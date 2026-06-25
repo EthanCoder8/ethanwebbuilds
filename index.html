@@ -98,10 +98,49 @@ body {
   content: '';
   position: absolute; inset: 0;
   background:
-    radial-gradient(ellipse 70% 60% at 50% 30%, rgba(58,124,165,0.07) 0%, transparent 70%),
     radial-gradient(ellipse 50% 50% at 80% 80%, rgba(212,245,60,0.06) 0%, transparent 60%);
   pointer-events: none;
 }
+
+.hero-orb {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 700px; height: 700px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(58,124,165,0.22) 0%, rgba(58,124,165,0.12) 35%, rgba(58,124,165,0.04) 65%, transparent 100%);
+  animation: orbPulse 6s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hero-orb::before {
+  content: '';
+  position: absolute; inset: -60px;
+  border-radius: 50%;
+  background: radial-gradient(circle, transparent 40%, rgba(58,124,165,0.07) 60%, rgba(58,124,165,0.12) 72%, rgba(58,124,165,0.05) 84%, transparent 100%);
+  animation: orbRingPulse 6s ease-in-out infinite;
+}
+
+.hero-orb::after {
+  content: '';
+  position: absolute; inset: -120px;
+  border-radius: 50%;
+  background: radial-gradient(circle, transparent 55%, rgba(58,124,165,0.06) 68%, rgba(58,124,165,0.09) 78%, rgba(58,124,165,0.03) 90%, transparent 100%);
+  animation: orbRingPulse 6s ease-in-out infinite reverse;
+}
+
+@keyframes orbPulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  50% { transform: translate(-50%, -50%) scale(1.08); opacity: 0.75; }
+}
+
+@keyframes orbRingPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.05); }
+}
+
+.hero > *:not(.hero-orb) { position: relative; z-index: 1; }
 
 .hero-badge {
   display: inline-flex; align-items: center; gap: 8px;
@@ -216,74 +255,55 @@ body {
 .wm-l { font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--text-lt); margin-top: 4px; }
 
 .work-preview {
-  background: #F5F0EB;
+  background: #1a1a1a;
   display: flex; flex-direction: column;
   position: relative; overflow: hidden;
+  min-height: 480px;
 }
 
-.browser-chrome {
-  background: rgba(255,255,255,0.8); border-bottom: 1px solid rgba(0,0,0,0.06);
-  padding: 12px 16px; display: flex; align-items: center; gap: 12px; flex-shrink: 0;
+.preview-screenshots { flex: 1; position: relative; }
+.preview-img {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  object-fit: contain; object-position: top;
+  opacity: 0; transition: opacity .4s ease;
 }
-.bdots { display: flex; gap: 6px; }
-.bdots span { width: 10px; height: 10px; border-radius: 50%; }
-.bd1{background:#FF5F57;} .bd2{background:#FEBC2E;} .bd3{background:#28C840;}
-.burl { font-size: 11px; color: #999; font-family: monospace; margin-left: 4px; }
-
-.lnm-ui { flex: 1; overflow: hidden; padding: 0; display: flex; flex-direction: column; }
-
-.lnm-header {
-  background: #fff; padding: 10px 20px;
-  display: flex; align-items: center; justify-content: space-between;
-  border-bottom: 1px solid rgba(0,0,0,0.05); flex-shrink: 0;
+.preview-img.active { opacity: 1; }
+.preview-tabs {
+  display: flex; gap: 0; border-top: 1px solid rgba(255,255,255,.08); flex-shrink: 0;
 }
-.lnm-logo-wrap { display: flex; align-items: center; gap: 9px; }
-.lnm-icon { width: 30px; height: 30px; background: #C0392B; border-radius: 7px; display: flex; align-items: center; justify-content: center; }
-.lnm-icon svg { width: 15px; height: 15px; }
-.lnm-title { font-size: 13px; font-weight: 700; color: #1a1a1a; }
-.lnm-sub { font-size: 9px; color: #999; font-weight: 400; }
-.lnm-moon { width: 28px; height: 28px; border-radius: 50%; background: #f0ede8; display: flex; align-items: center; justify-content: center; }
-
-.lnm-body { flex: 1; padding: 18px 20px; overflow: hidden; }
-
-.lnm-hero-badge {
-  background: rgba(192,57,43,0.08); border: 1px solid rgba(192,57,43,0.15);
-  color: #C0392B; font-size: 9px; font-weight: 700; letter-spacing: .1em;
-  text-transform: uppercase; padding: 4px 12px; border-radius: 100px;
-  display: inline-block; margin-bottom: 8px;
+.preview-tab {
+  flex: 1; padding: 12px; border: none; background: transparent;
+  color: rgba(255,255,255,.35); font-family: 'Geist', sans-serif;
+  font-size: 10.5px; font-weight: 600; letter-spacing: .08em;
+  text-transform: uppercase; cursor: pointer;
+  transition: all .2s; border-bottom: 2px solid transparent;
 }
-.lnm-hero-title { font-family: 'Geist', sans-serif; font-size: 18px; font-weight: 800; color: #1a1a1a; margin-bottom: 4px; }
-.lnm-hero-title span { color: #C0392B; }
-.lnm-hero-sub { font-size: 10px; color: #888; margin-bottom: 16px; }
-
-.lnm-upcoming-label {
-  font-size: 12px; font-weight: 700; color: #1a1a1a; margin-bottom: 12px;
-  display: flex; align-items: center; justify-content: space-between;
+.preview-tab.active { color: #fff; border-bottom-color: var(--blue); }
+.preview-tab:hover { color: rgba(255,255,255,.6); }
+.work-preview--light { background: #f4f1ec; }
+.work-preview--light .preview-tabs { border-top-color: rgba(0,0,0,.08); }
+.work-preview--light .preview-tab { color: var(--text-lt); }
+.work-preview--light .preview-tab.active { color: var(--text); border-bottom-color: #4a7c3f; }
+.work-preview--light .preview-tab:hover { color: var(--text-mid); }
+.carousel-container { position: relative; }
+.carousel-track { position: relative; }
+.carousel-slide {
+  position: absolute; top: 0; left: 0; width: 100%;
+  opacity: 0; transition: opacity .5s ease; pointer-events: none;
 }
-.lnm-nav-arrows { display: flex; gap: 6px; }
-.lnm-arrow { width: 22px; height: 22px; border-radius: 50%; background: #f0ede8; border: none; display: flex; align-items: center; justify-content: center; cursor: default; }
-
-.lnm-cards-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
-.lnm-ecard { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,.06); }
-.lnm-ecard-img {
-  height: 140px; position: relative;
-  display: flex; align-items: flex-end; padding: 10px;
-  background-size: cover; background-position: center;
+.carousel-slide.active { position: relative; opacity: 1; pointer-events: all; }
+.carousel-nav { display: flex; justify-content: center; gap: 8px; margin-top: 24px; }
+.carousel-dot {
+  padding: 8px 20px; border-radius: 100px; border: 1px solid var(--border);
+  background: transparent; cursor: pointer; transition: all .2s;
+  font-family: 'Geist', sans-serif; font-size: 12px; font-weight: 600; color: var(--text-lt);
 }
-.lnm-ecard-img::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 30%, rgba(0,0,0,0.65) 100%); border-radius: 0; }
-.padel-img { background: linear-gradient(135deg, #1a4a2e 0%, #2d6b3e 40%, #4a8b5e 100%); }
-.football-img { background: linear-gradient(135deg, #1a2a1a 0%, #2d4a2d 40%, #3a5a3a 100%); }
-.run-img { background: linear-gradient(135deg, #1a2a3a 0%, #2d4a6a 40%, #4a7aaa 100%); }
-.lnm-price-badge { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.5); color: #fff; font-size: 9px; font-weight: 700; padding: 3px 9px; border-radius: 100px; z-index: 2; }
-.lnm-free-badge { background: rgba(255,255,255,0.9); color: #1a1a1a; }
-.lnm-loc-badge { position: absolute; bottom: 36px; left: 10px; z-index: 2; display: flex; align-items: center; gap: 3px; }
-.lnm-loc-dot { width: 6px; height: 6px; background: #C0392B; border-radius: 50%; }
-.lnm-loc-text { font-size: 8px; font-weight: 600; color: rgba(255,255,255,0.85); text-transform: uppercase; letter-spacing: .06em; }
-.lnm-card-title-text { position: absolute; bottom: 14px; left: 10px; right: 10px; z-index: 2; font-size: 13px; font-weight: 700; color: #fff; line-height: 1.2; }
-.lnm-card-meta-text { position: absolute; bottom: 8px; left: 10px; right: 10px; z-index: 2; font-size: 8px; color: rgba(255,255,255,0.7); }
-.lnm-ecard-footer { padding: 8px 10px; }
-.lnm-ecard-details { font-size: 8.5px; color: #888; margin-bottom: 7px; display: flex; flex-direction: column; gap: 2px; }
-.lnm-book-btn { width: 100%; padding: 8px; background: #fff; color: #1a1a1a; border: none; border-radius: 8px; font-size: 10px; font-weight: 700; letter-spacing: .02em; cursor: default; box-shadow: 0 1px 4px rgba(0,0,0,.08); }
+.carousel-dot.active { background: var(--black); color: #fff; border-color: var(--black); }
+.carousel-dot:hover:not(.active) { border-color: var(--text-lt); }
+.carousel-progress { width: 200px; height: 2px; background: var(--border); margin: 16px auto 0; border-radius: 2px; overflow: hidden; }
+.carousel-progress-bar { height: 100%; background: var(--blue); width: 0%; }
+.carousel-progress-bar.animate { animation: progressFill 6s linear forwards; }
+@keyframes progressFill { from { width: 0; } to { width: 100%; } }
 
 /* ── SERVICES ── */
 .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
@@ -391,16 +411,17 @@ footer {
 
 <!-- HERO -->
 <section class="hero">
+  <div class="hero-orb"></div>
   <div class="hero-badge">
     <div class="badge-pulse"></div>
     UK — Available for new projects
   </div>
   <h1>
-    Your website.<br>
+    Websites &amp; tools.<br>
     <em>Built right.</em>
   </h1>
   <p class="hero-sub">
-    Hi, I'm Ethan. I build custom websites, booking systems, and digital tools — collaboratively, from idea to launch. Modern themes, real functionality, nothing off the shelf.
+    Hi, I'm Ethan. I build custom websites, booking systems, and automation tools for businesses — collaboratively, from idea to launch. Real functionality, tailored to how you work.
   </p>
   <div class="scroll-hint">
     <span>Scroll to see my work</span>
@@ -416,114 +437,101 @@ footer {
 </div>
 
 <div style="max-width:1200px;margin:0 auto;padding:0 40px 100px;" class="reveal">
-  <div class="work-card">
-    <div class="work-card-top">
-      <div class="work-info">
-        <div>
-          <div class="work-tag">Case Study — Dubai, UAE — 2026</div>
-          <h2>Lift N'<br><em style="color:#C0392B;">Move</em></h2>
-          <p>A full-stack fitness community booking platform built from scratch in Dubai. Members browse upcoming events, book sessions in seconds, and receive an instant confirmation. Coaches manage everything from a custom admin dashboard.</p>
-          <div class="work-chips">
-            <span class="chip">React</span>
-            <span class="chip">Supabase</span>
-            <span class="chip">Vercel</span>
-            <span class="chip">PayPal</span>
-            <span class="chip">Strava API</span>
-            <span class="chip">Dark Mode</span>
-          </div>
-        </div>
-        <div class="work-metrics">
-          <div><div class="wm-n">8<em>+</em></div><div class="wm-l">Features shipped</div></div>
-          <div><div class="wm-n">0</div><div class="wm-l">Templates used</div></div>
-          <div><div class="wm-n">Live</div><div class="wm-l">In production</div></div>
-        </div>
-      </div>
+  <div class="carousel-container">
+    <div class="carousel-track">
 
-      <!-- LiftNMove preview -->
-      <div class="work-preview">
-        <div class="browser-chrome">
-          <div class="bdots"><span class="bd1"></span><span class="bd2"></span><span class="bd3"></span></div>
-          <div class="burl">liftnmoveglobal.co</div>
-        </div>
-        <div class="lnm-ui">
-          <div class="lnm-header">
-            <div class="lnm-logo-wrap">
-              <div class="lnm-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-              </div>
+      <!-- Slide 1: LiftNMove -->
+      <div class="carousel-slide active">
+        <div class="work-card">
+          <div class="work-card-top">
+            <div class="work-info">
               <div>
-                <div class="lnm-title">Lift N' Move</div>
-                <div class="lnm-sub">Lifestyle &amp; Wellness</div>
-              </div>
-            </div>
-            <div class="lnm-moon">
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2" stroke-linecap="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
-            </div>
-          </div>
-          <div class="lnm-body">
-            <div style="text-align:center;margin-bottom:14px;">
-              <div class="lnm-hero-badge">Lifestyle and Wellness Redefined</div>
-              <div class="lnm-hero-title">Hello, welcome to <span>Lift N' Move</span></div>
-              <div class="lnm-hero-sub">Find a session, secure your spot, show up and have fun.</div>
-            </div>
-            <div class="lnm-upcoming-label">
-              Upcoming events
-              <div class="lnm-nav-arrows">
-                <div class="lnm-arrow"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg></div>
-                <div class="lnm-arrow"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></div>
-              </div>
-            </div>
-            <div class="lnm-cards-row">
-              <div class="lnm-ecard">
-                <div class="lnm-ecard-img padel-img">
-                  <span class="lnm-price-badge">AED 40.00</span>
-                  <div class="lnm-loc-badge"><div class="lnm-loc-dot"></div><div class="lnm-loc-text">MVP Padel Al Quoz</div></div>
-                  <div class="lnm-card-title-text">Lift N' Move Padel</div>
-                  <svg style="position:absolute;right:10px;bottom:20px;z-index:2;opacity:.4" width="30" height="30" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="7" r="5"/><path d="M5 22s1-7 7-7 7 7 7 7"/></svg>
-                </div>
-                <div class="lnm-ecard-footer">
-                  <div class="lnm-ecard-details"><span>📅 Sun 17 May · 11:00 · 1h</span><span>👥 8 of 8 spots left</span></div>
-                  <button class="lnm-book-btn">Book now</button>
+                <div class="work-tag">Case Study — Dubai, UAE — 2026</div>
+                <h2>Lift N’<br><em style="color:#C0392B;">Move</em></h2>
+                <p>A full-stack fitness community booking platform built from scratch. Members browse upcoming events, book sessions in seconds, and receive instant confirmation. Coaches manage everything from a custom admin dashboard.</p>
+                <div class="work-chips">
+                  <span class="chip">React</span>
+                  <span class="chip">Supabase</span>
+                  <span class="chip">Vercel</span>
+                  <span class="chip">PayPal</span>
+                  <span class="chip">Stripe</span>
+                  <span class="chip">Strava API</span>
                 </div>
               </div>
-              <div class="lnm-ecard">
-                <div class="lnm-ecard-img football-img">
-                  <span class="lnm-price-badge">AED 40.00</span>
-                  <div class="lnm-loc-badge"><div class="lnm-loc-dot"></div><div class="lnm-loc-text">Al Quoz</div></div>
-                  <div class="lnm-card-title-text">Lift N' Move 5's Football</div>
-                  <svg style="position:absolute;right:10px;bottom:20px;z-index:2;opacity:.4" width="26" height="26" viewBox="0 0 24 24" fill="white"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 000 20A10 10 0 0012 2z" fill="none" stroke="white" stroke-width="1"/><path d="M12 6l3 4H9l3-4zm0 12l-3-4h6l-3 4zm-6-6l4-3v6l-4-3zm12 0l-4 3V9l4 3z" fill="white" opacity=".6"/></svg>
-                </div>
-                <div class="lnm-ecard-footer">
-                  <div class="lnm-ecard-details"><span>📅 Tue 19 May · 20:00 · 1h</span><span>👥 13 of 14 spots left</span></div>
-                  <button class="lnm-book-btn">Book now</button>
-                </div>
+              <div class="work-metrics">
+                <div><div class="wm-n">8<em>+</em></div><div class="wm-l">Features shipped</div></div>
+                <div><div class="wm-n">0</div><div class="wm-l">Templates used</div></div>
+                <div><div class="wm-n">Live</div><div class="wm-l">In production</div></div>
               </div>
-              <div class="lnm-ecard">
-                <div class="lnm-ecard-img run-img">
-                  <span class="lnm-price-badge lnm-free-badge">Free</span>
-                  <div class="lnm-loc-badge"><div class="lnm-loc-dot"></div><div class="lnm-loc-text">JBR</div></div>
-                  <div class="lnm-card-title-text">Lift N' Move 5k Run Club</div>
-                  <svg style="position:absolute;right:10px;bottom:20px;z-index:2;opacity:.4" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M13 4a1 1 0 102 0 1 1 0 00-2 0zm-2 4l-3 8m3-8l2 3 3-2"/></svg>
-                </div>
-                <div class="lnm-ecard-footer">
-                  <div class="lnm-ecard-details"><span>📅 Thu 21 May · 19:00 · 1h25m</span><span>👥 2 people signed up</span></div>
-                  <button class="lnm-book-btn">Book now</button>
-                </div>
+            </div>
+            <div class="work-preview">
+              <div class="preview-screenshots">
+                <img src="images/lnm-booking.png" alt="LiftNMove booking page" class="preview-img active">
+                <img src="images/lnm-admin.png" alt="LiftNMove admin panel" class="preview-img">
+              </div>
+              <div class="preview-tabs">
+                <button class="preview-tab active" data-img="0">Booking page</button>
+                <button class="preview-tab" data-img="1">Admin panel</button>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      <!-- Slide 2: MilletsFit -->
+      <div class="carousel-slide">
+        <div class="work-card">
+          <div class="work-card-top">
+            <div class="work-info">
+              <div>
+                <div class="work-tag">Case Study — Dubai, UAE — 2026</div>
+                <h2>Millets<em style="color:#4a7c3f;">Fit</em>.com</h2>
+                <p>A health-focused meal plan website for a whole-millet kitchen in the UAE. Custom storefront with condition-specific plans, automated order confirmations to the client, kitchen, and admin, and a private admin panel — all wired together with custom plugin integrations.</p>
+                <div class="work-chips">
+                  <span class="chip">Custom Design</span>
+                  <span class="chip">E-commerce</span>
+                  <span class="chip">Email Automation</span>
+                  <span class="chip">Admin Panel</span>
+                  <span class="chip">Plugin Integrations</span>
+                </div>
+              </div>
+              <div class="work-metrics">
+                <div><div class="wm-n">6</div><div class="wm-l">Meal plans</div></div>
+                <div><div class="wm-n">0</div><div class="wm-l">Templates used</div></div>
+                <div><div class="wm-n">Live</div><div class="wm-l">In production</div></div>
+              </div>
+            </div>
+            <div class="work-preview work-preview--light">
+              <div class="preview-screenshots">
+                <img src="images/mf-home.png" alt="MilletsFit homepage" class="preview-img active">
+                <img src="images/mf-plans.png" alt="MilletsFit plans page" class="preview-img">
+              </div>
+              <div class="preview-tabs">
+                <button class="preview-tab active" data-img="0">Homepage</button>
+                <button class="preview-tab" data-img="1">Plans page</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
 
-    <!-- Next project bar -->
-    <div style="padding:28px 40px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--bg-card);">
-      <div>
-        <div style="font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text-lt);margin-bottom:6px;">Up next</div>
-        <div style="font-family:'Instrument Serif',serif;font-size:22px;color:var(--black);">Your business could be here.</div>
-      </div>
-      <a href="#contact" class="btn-primary">Start a project</a>
+    <!-- Carousel navigation -->
+    <div class="carousel-nav">
+      <button class="carousel-dot active" data-slide="0">LiftNMove</button>
+      <button class="carousel-dot" data-slide="1">MilletsFit.com</button>
     </div>
+    <div class="carousel-progress"><div class="carousel-progress-bar animate"></div></div>
+  </div>
+
+  <!-- CTA bar -->
+  <div style="background:var(--bg-card);border-radius:20px;padding:28px 40px;display:flex;align-items:center;justify-content:space-between;margin-top:24px;border:1px solid var(--border);">
+    <div>
+      <div style="font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text-lt);margin-bottom:6px;">Up next</div>
+      <div style="font-family:'Instrument Serif',serif;font-size:22px;color:var(--black);">Your business could be here.</div>
+    </div>
+    <a href="#contact" class="btn-primary">Start a project</a>
   </div>
 </div>
 
@@ -545,9 +553,9 @@ footer {
     </div>
     <div class="svc-card reveal d2">
       <div class="svc-num">03</div>
-      <h3>AI Tools &amp; Automation</h3>
-      <p>AI chatbots, WhatsApp agents, email sequences, and lead capture systems — built to do the admin work while you focus on your business.</p>
-      <span class="svc-pill">AI · WhatsApp · Email</span>
+      <h3>Custom Automation &amp; AI Tools</h3>
+      <p>Bespoke workflow tools and AI-powered systems tailored to your business — WhatsApp agents, lead capture bots, automated scheduling, email sequences, and internal dashboards. Not off-the-shelf software. Tools designed around how your team actually works, built and maintained for you.</p>
+      <span class="svc-pill">AI · Workflows · WhatsApp</span>
     </div>
   </div>
 </div>
@@ -625,7 +633,10 @@ footer {
         <div class="fg"><label>Your name</label><input type="text" name="name" autocomplete="given-name" placeholder="First name" required/></div>
         <div class="fg"><label>Business</label><input type="text" name="business" autocomplete="organization" placeholder="Your business"/></div>
       </div>
-      <div class="fg"><label>Email</label><input type="email" name="email" autocomplete="email" placeholder="you@yourbusiness.com" required/></div>
+      <div class="frow">
+        <div class="fg"><label>Email</label><input type="email" name="email" autocomplete="email" placeholder="you@yourbusiness.com" required/></div>
+        <div class="fg"><label>Phone</label><input type="tel" name="phone" autocomplete="tel" placeholder="+44 7XXX XXXXXX"/></div>
+      </div>
       <div class="fg">
         <label>What do you need?</label>
         <select name="service">
@@ -664,6 +675,58 @@ window.addEventListener('scroll', () => {
   nav.style.background = window.scrollY > 60
     ? 'rgba(242,240,235,0.7)'
     : 'transparent';
+});
+
+// Carousel
+const slides = document.querySelectorAll('.carousel-slide');
+const cdots = document.querySelectorAll('.carousel-dot');
+const progressBar = document.querySelector('.carousel-progress-bar');
+let currentSlide = 0;
+let carouselTimer;
+
+function goToSlide(idx) {
+  slides.forEach(s => s.classList.remove('active'));
+  cdots.forEach(d => d.classList.remove('active'));
+  slides[idx].classList.add('active');
+  cdots[idx].classList.add('active');
+  currentSlide = idx;
+  progressBar.classList.remove('animate');
+  void progressBar.offsetWidth;
+  progressBar.classList.add('animate');
+}
+
+function nextSlide() {
+  goToSlide((currentSlide + 1) % slides.length);
+}
+
+function startCarousel() {
+  clearInterval(carouselTimer);
+  carouselTimer = setInterval(nextSlide, 6000);
+  progressBar.classList.remove('animate');
+  void progressBar.offsetWidth;
+  progressBar.classList.add('animate');
+}
+
+startCarousel();
+
+cdots.forEach((dot, i) => {
+  dot.addEventListener('click', () => {
+    goToSlide(i);
+    startCarousel();
+  });
+});
+
+document.querySelectorAll('.preview-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    const preview = tab.closest('.work-preview');
+    const imgs = preview.querySelectorAll('.preview-img');
+    const tabs = preview.querySelectorAll('.preview-tab');
+    const idx = parseInt(tab.dataset.img);
+    imgs.forEach(img => img.classList.remove('active'));
+    tabs.forEach(t => t.classList.remove('active'));
+    imgs[idx].classList.add('active');
+    tab.classList.add('active');
+  });
 });
 </script>
 </body>
