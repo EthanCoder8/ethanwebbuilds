@@ -285,6 +285,10 @@ body {
 .work-preview--light .preview-tab { color: var(--text-lt); }
 .work-preview--light .preview-tab.active { color: var(--text); border-bottom-color: #4a7c3f; }
 .work-preview--light .preview-tab:hover { color: var(--text-mid); }
+.work-preview-link { text-decoration: none; cursor: pointer; transition: transform .2s ease, box-shadow .2s ease; display: flex; flex-direction: column; }
+.work-preview-link:hover { transform: scale(1.01); box-shadow: 0 8px 30px rgba(0,0,0,.15); }
+.visit-site-link { display: inline-block; margin-top: 16px; font-size: 13px; font-weight: 600; color: var(--blue); text-decoration: none; letter-spacing: .02em; transition: opacity .2s; }
+.visit-site-link:hover { opacity: .7; }
 .carousel-container { position: relative; }
 .carousel-track { position: relative; }
 .carousel-slide {
@@ -457,6 +461,7 @@ footer {
                   <span class="chip">Stripe</span>
                   <span class="chip">Strava API</span>
                 </div>
+                <a href="https://liftnmoveglobal.co" target="_blank" rel="noopener" class="visit-site-link">Visit live site &rarr;</a>
               </div>
               <div class="work-metrics">
                 <div><div class="wm-n">8<em>+</em></div><div class="wm-l">Features shipped</div></div>
@@ -464,7 +469,7 @@ footer {
                 <div><div class="wm-n">Live</div><div class="wm-l">In production</div></div>
               </div>
             </div>
-            <div class="work-preview">
+            <a href="https://liftnmoveglobal.co" target="_blank" rel="noopener" class="work-preview work-preview-link">
               <div class="preview-screenshots">
                 <img src="images/lnm-booking.png" alt="LiftNMove booking page" class="preview-img active">
                 <img src="images/lnm-admin.png" alt="LiftNMove admin panel" class="preview-img">
@@ -473,7 +478,7 @@ footer {
                 <button class="preview-tab active" data-img="0">Booking page</button>
                 <button class="preview-tab" data-img="1">Admin panel</button>
               </div>
-            </div>
+            </a>
           </div>
         </div>
       </div>
@@ -494,6 +499,7 @@ footer {
                   <span class="chip">Admin Panel</span>
                   <span class="chip">Plugin Integrations</span>
                 </div>
+                <a href="https://milletsfit.com" target="_blank" rel="noopener" class="visit-site-link">Visit live site &rarr;</a>
               </div>
               <div class="work-metrics">
                 <div><div class="wm-n">6</div><div class="wm-l">Meal plans</div></div>
@@ -501,7 +507,7 @@ footer {
                 <div><div class="wm-n">Live</div><div class="wm-l">In production</div></div>
               </div>
             </div>
-            <div class="work-preview work-preview--light">
+            <a href="https://milletsfit.com" target="_blank" rel="noopener" class="work-preview work-preview--light work-preview-link">
               <div class="preview-screenshots">
                 <img src="images/mf-home.png" alt="MilletsFit homepage" class="preview-img active">
                 <img src="images/mf-plans.png" alt="MilletsFit plans page" class="preview-img">
@@ -510,7 +516,7 @@ footer {
                 <button class="preview-tab active" data-img="0">Homepage</button>
                 <button class="preview-tab" data-img="1">Plans page</button>
               </div>
-            </div>
+            </a>
           </div>
         </div>
       </div>
