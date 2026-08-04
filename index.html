@@ -226,7 +226,7 @@ body {
 .work-card {
   background: var(--white); border-radius: 20px;
   border: 1px solid var(--border);
-  overflow: hidden; height: 100%;
+  overflow: hidden;
   box-shadow: 0 2px 40px rgba(0,0,0,0.05);
 }
 
@@ -254,18 +254,14 @@ body {
   aspect-ratio: 2990 / 1654; background: #f4f1ec;
   position: relative; overflow: hidden;
 }
-.browser-viewport video {
+/* screenshots are 2200x1217 — the same 1.808 ratio as the frame, so they fill it exactly */
+.browser-viewport img {
   position: absolute; top: 0; left: 0;
   width: 100%; height: 100%; display: block;
-  object-fit: contain; object-position: top center;
+  object-fit: cover; object-position: top center;
   opacity: 0; transition: opacity .35s ease;
 }
-.browser-viewport video.active { opacity: 1; }
-/* hides the signed-in admin header strip on the admin walkthrough */
-.browser-viewport video.crop-top {
-  height: 113%; top: -13%;
-  object-fit: cover; object-position: center top;
-}
+.browser-viewport img.active { opacity: 1; }
 .frame-open { position: absolute; inset: 0; z-index: 2; display: block; text-decoration: none; }
 .media-badge {
   position: absolute; bottom: 12px; right: 12px;
@@ -325,7 +321,9 @@ body {
 .visit-site-link { display: inline-block; margin-top: 16px; font-size: 13px; font-weight: 600; color: var(--blue); text-decoration: none; letter-spacing: .02em; transition: opacity .2s; }
 .visit-site-link:hover { opacity: .7; }
 .carousel-container { position: relative; }
-.carousel-track { display: grid; }
+/* height is set in JS to match the active slide, so the shorter case study
+   never leaves dead space at the bottom of its card */
+.carousel-track { display: grid; align-items: start; transition: height .4s ease; }
 .carousel-slide {
   grid-area: 1 / 1;
   opacity: 0; visibility: hidden;
@@ -568,11 +566,11 @@ footer {
                 <div class="browser-url">liftnmoveglobal.co</div>
               </div>
               <div class="browser-viewport" style="background:#1a1a1a;">
-                <video class="wv active" data-src="videos/lnm-site.mp4" muted loop playsinline preload="none" aria-label="LiftNMove site walkthrough"></video>
-                <video class="wv" data-src="videos/lnm-booking.mp4" muted loop playsinline preload="none" aria-label="LiftNMove booking flow"></video>
-                <video class="wv crop-top" data-src="videos/lnm-admin.mp4" muted loop playsinline preload="none" aria-label="LiftNMove admin dashboard"></video>
+                <img class="wv active" src="images/lnm-site.jpg" alt="LiftNMove booking site homepage with upcoming events" width="2200" height="1217">
+                <img class="wv" src="images/lnm-booking.jpg" alt="LiftNMove booking and payment form" width="2200" height="1217" loading="lazy">
+                <img class="wv" src="images/lnm-admin.jpg" alt="LiftNMove admin dashboard listing all events" width="2200" height="1217" loading="lazy">
                 <a href="https://liftnmoveglobal.co" target="_blank" rel="noopener" class="frame-open" aria-label="Open liftnmoveglobal.co">
-                  <span class="media-badge"><i></i> Live walkthrough</span>
+                  <span class="media-badge"><i></i> Live site</span>
                 </a>
               </div>
               <div class="frame-tabs">
@@ -616,11 +614,11 @@ footer {
                 <div class="browser-url">milletsfit.com</div>
               </div>
               <div class="browser-viewport">
-                <video class="wv active" data-src="videos/mf-storefront.mp4" muted loop playsinline preload="none" aria-label="MilletsFit storefront"></video>
-                <video class="wv" data-src="videos/mf-plans.mp4" muted loop playsinline preload="none" aria-label="MilletsFit meal plans"></video>
-                <video class="wv" data-src="videos/mf-checkout.mp4" muted loop playsinline preload="none" aria-label="MilletsFit checkout and payment"></video>
+                <img class="wv active" src="images/mf-storefront.jpg" alt="MilletsFit storefront homepage" width="2200" height="1217">
+                <img class="wv" src="images/mf-plans.jpg" alt="MilletsFit condition-specific meal plan page" width="2200" height="1217" loading="lazy">
+                <img class="wv" src="images/mf-checkout.jpg" alt="MilletsFit checkout with delivery options and Stripe payment" width="2200" height="1217" loading="lazy">
                 <a href="https://milletsfit.com" target="_blank" rel="noopener" class="frame-open" aria-label="Open milletsfit.com">
-                  <span class="media-badge"><i></i> Live walkthrough</span>
+                  <span class="media-badge"><i></i> Live site</span>
                 </a>
               </div>
               <div class="frame-tabs">
@@ -834,8 +832,17 @@ navPill.querySelectorAll('a').forEach(link => {
 const slides = document.querySelectorAll('.carousel-slide');
 const cdots = document.querySelectorAll('.carousel-dot');
 const progressBar = document.querySelector('.carousel-progress-bar');
+const track = document.querySelector('.carousel-track');
 let currentSlide = 0;
 let carouselTimer;
+
+// Collapse the track to whatever slide is showing — the two case studies
+// have different amounts of copy, so a shared height leaves the shorter
+// one padded out with blank space.
+function syncTrackHeight() {
+  const active = document.querySelector('.carousel-slide.active');
+  if (active) track.style.height = active.offsetHeight + 'px';
+}
 
 function goToSlide(idx) {
   slides.forEach(s => s.classList.remove('active'));
@@ -843,11 +850,19 @@ function goToSlide(idx) {
   slides[idx].classList.add('active');
   cdots[idx].classList.add('active');
   currentSlide = idx;
+  syncTrackHeight();
   progressBar.classList.remove('animate');
   void progressBar.offsetWidth;
   progressBar.classList.add('animate');
-  if (typeof syncAllVideos === 'function') syncAllVideos();
 }
+
+syncTrackHeight();
+window.addEventListener('resize', syncTrackHeight);
+window.addEventListener('load', syncTrackHeight);
+// screenshots settle late and change the card height
+document.querySelectorAll('.browser-viewport img').forEach(img => {
+  if (!img.complete) img.addEventListener('load', syncTrackHeight, { once: true });
+});
 
 function nextSlide() {
   goToSlide((currentSlide + 1) % slides.length);
@@ -870,50 +885,15 @@ cdots.forEach((dot, i) => {
   });
 });
 
-// Case study walkthroughs — a clip only downloads when its tab is showing and on screen
-const caseVideos = document.querySelectorAll('.browser-viewport video');
-const onScreenFrames = new WeakSet();
-
-function syncVideo(v) {
-  const slide = v.closest('.carousel-slide');
-  const frame = v.closest('.browser-viewport');
-  const shouldPlay =
-    onScreenFrames.has(frame) &&
-    v.classList.contains('active') &&
-    (!slide || slide.classList.contains('active'));
-
-  if (shouldPlay) {
-    if (!v.getAttribute('src') && v.dataset.src) v.setAttribute('src', v.dataset.src);
-    v.play().catch(() => {});
-  } else if (!v.paused) {
-    v.pause();
-  }
-}
-
-function syncAllVideos() { caseVideos.forEach(syncVideo); }
-
-const videoObs = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) onScreenFrames.add(e.target);
-    else onScreenFrames.delete(e.target);
-  });
-  syncAllVideos();
-}, { threshold: 0.2 });
-
-document.querySelectorAll('.browser-viewport').forEach(f => videoObs.observe(f));
-
-// Walkthrough tabs
+// Case study screenshot tabs
 document.querySelectorAll('.frame-tabs').forEach(tabs => {
-  const frame = tabs.closest('.browser-frame');
-  const vids = frame.querySelectorAll('video');
+  const shots = tabs.closest('.browser-frame').querySelectorAll('.browser-viewport img');
   tabs.querySelectorAll('.frame-tab').forEach(tab => {
     tab.addEventListener('click', () => {
-      const i = +tab.dataset.i;
       tabs.querySelectorAll('.frame-tab').forEach(t => t.classList.remove('active'));
-      vids.forEach(v => v.classList.remove('active'));
+      shots.forEach(s => s.classList.remove('active'));
       tab.classList.add('active');
-      vids[i].classList.add('active');
-      syncAllVideos();
+      shots[+tab.dataset.i].classList.add('active');
     });
   });
 });
